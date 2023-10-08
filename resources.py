@@ -36,12 +36,15 @@ def new_group(username):
         option = input("Enter the option number: ")
 
         if option == "1":
+            view_group(group_table_name, username)
             # Implement code to see outstanding balances
             pass
         elif option == "2":
+            split_among(username, group_table_name)
             # Implement code to add an expense to split among the group
             pass
         elif option == "3":
+            add_or_negate(username, group_table_name)
             # Implement code to add an individual expense
             pass
         elif option == "4":
@@ -68,6 +71,16 @@ def view_group(selected_group, username):
     if group_data:
         print("Group Members:")
         df = pd.DataFrame(group_data, columns=["S_no", "Name", "Outstanding_Due"])
+        for i, row in df.iterrows():
+            member_name = row["Name"]
+            member_table_name = f"{member_name}_mem"
+
+            # Fetch and sum the Aggregate column from the member's table
+            cursor.execute(f"SELECT SUM(Aggregate) FROM {member_table_name}")
+            sum_aggregate = cursor.fetchone()[0]
+
+            # Update the Outstanding_Due column in the group table with the sum
+            df.at[i, "Outstanding_Due"] = sum_aggregate
         print(df)
     else:
         print("The selected group is empty.")
