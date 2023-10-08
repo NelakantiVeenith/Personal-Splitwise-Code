@@ -78,6 +78,7 @@ def view_group(selected_group, username):
             # Fetch and sum the Aggregate column from the member's table
             cursor.execute(f"SELECT SUM(Aggregate) FROM {member_table_name}")
             sum_aggregate = cursor.fetchone()[0]
+            sum_aggregate = round(sum_aggregate,2)
 
             # Update the Outstanding_Due column in the group table with the sum
             df.at[i, "Outstanding_Due"] = sum_aggregate
