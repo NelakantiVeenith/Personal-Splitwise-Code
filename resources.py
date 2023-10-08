@@ -81,6 +81,11 @@ def view_group(selected_group, username):
 
             # Update the Outstanding_Due column in the group table with the sum
             df.at[i, "Outstanding_Due"] = sum_aggregate
+
+            if sum_aggregate < 0:
+                df.at[i, "Status"] = f"{member_name} needs to pay you {abs(sum_aggregate)}"
+            else:
+                df.at[i, "Status"] = f"You need to pay {member_name} {abs(sum_aggregate)}"
         print(df)
     else:
         print("The selected group is empty.")
